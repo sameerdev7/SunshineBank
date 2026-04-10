@@ -1,0 +1,12 @@
+# 1. Start MySQL
+sudo systemctl start mysql
+
+# 2. Start Redis
+docker start bankingportal-redis
+
+# 3. Run app
+cd ~/Learning/Projects/Java_Projects/BankingPortal-API
+./mvnw spring-boot:run
+
+# 4. Open in browser
+http://localhost:8180/swagger-ui/index.html
