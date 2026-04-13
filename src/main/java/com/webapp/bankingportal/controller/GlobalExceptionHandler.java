@@ -32,39 +32,36 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccountDoesNotExistException.class)
     public ResponseEntity<String> handleAccountDoesNotExistException(
             AccountDoesNotExistException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+       return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<String> handleBadCredentialsException(BadCredentialsException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
-    }
+        return error(HttpStatus.UNAUTHORIZED, ex.getMessage());    }
 
     @ExceptionHandler(FundTransferException.class)
     public ResponseEntity<String> handleFundTransferException(FundTransferException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(GeolocationException.class)
     public ResponseEntity<String> handleGeolocationException(GeolocationException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-    }
+       return error(HttpStatus.BAD_REQUEST, ex.getMessage());    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(
             IllegalArgumentException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
-    }
+        return error(HttpStatus.BAD_REQUEST, ex.getMessage());    }
 
     @ExceptionHandler(InsufficientBalanceException.class)
     public ResponseEntity<String> handleInsufficientBalanceException(
             InsufficientBalanceException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+       return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(InvalidAmountException.class)
     public ResponseEntity<String> handleInvalidAmountException(InvalidAmountException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+          return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(InvalidOtpException.class)
@@ -74,22 +71,22 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidPinException.class)
     public ResponseEntity<String> handleInvalidPinException(InvalidPinException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+       return error(HttpStatus.BAD_REQUEST, ex.getMessage());    
     }
+    
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<String> handleInvalidTokenException(InvalidTokenException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
-    }
+       return error(HttpStatus.UNAUTHORIZED, ex.getMessage());    }
 
     @ExceptionHandler(JsonProcessingException.class)
     public ResponseEntity<String> handleJsonProcessingException(JsonProcessingException ex) {
-        return ResponseEntity.internalServerError().body(ex.getMessage());
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        return error(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(OtpRetryLimitExceededException.class)
@@ -100,33 +97,36 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(PasswordResetException.class)
     public ResponseEntity<String> handlePasswordResetException(PasswordResetException ex, WebRequest request) {
-        return ResponseEntity.internalServerError()
-                .body("{\"message\": \"" + ex.getMessage() + "\"}");
+       return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(RestClientException.class)
     public ResponseEntity<String> handleRestClientException(RestClientException ex) {
-        return ResponseEntity.internalServerError().body(ex.getMessage());
+        return error(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<String> handleUnauthorizedException(UnauthorizedException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+        return error(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
     @ExceptionHandler(UserInvalidException.class)
     public ResponseEntity<String> handleUserInvalidException(UserInvalidException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return error(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(RedisConnectionFailureException.class)
-    public ResponseEntity<Map<String, String>> handleRedisConnectionFailure(RedisConnectionFailureException ex) {
-        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Map.of("message", ApiMessages.REDIS_CONNECTION_FAILURE.getMessage()));
+    public ResponseEntity<String> handleRedisConnectionFailure(RedisConnectionFailureException ex) {
+          return error(HttpStatus.SERVICE_UNAVAILABLE, ApiMessages.REDIS_CONNECTION_FAILURE.getMessage());
     }
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGlobalException(Exception ex, WebRequest request) {
         return ResponseEntity.internalServerError()
                 .body("{\"message\": \"An unexpected error occurred: " + ex.getMessage() + "\"}");
+    }
+
+    private ResponseEntity<String> error(HttpStatus status, String message) {
+    return ResponseEntity.status(status)
+        .body("{\"message\": \"" + message.replace("\"", "\\\"") + "\"}");
     }
 }

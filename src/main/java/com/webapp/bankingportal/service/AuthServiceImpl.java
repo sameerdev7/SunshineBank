@@ -47,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public boolean verifyPasswordResetToken(String token, User user) {
         return passwordResetTokenRepository.findByToken(token)
                 .map(resetToken -> {
@@ -57,6 +58,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional
     public void deletePasswordResetToken(String token) {
         passwordResetTokenRepository.deleteByToken(token);
     }

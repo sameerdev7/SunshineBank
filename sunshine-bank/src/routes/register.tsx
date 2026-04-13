@@ -15,7 +15,7 @@ export const Route = createFileRoute("/register")({
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ name: "", email: "", password: "", address: "", phoneNumber: "", countryCode: "+91" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", address: "", phoneNumber: "", countryCode: "IN" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -78,15 +78,16 @@ function RegisterPage() {
               <Input id="address" value={form.address} onChange={set("address")} placeholder="123 Main St, City" required />
             </div>
             <div className="grid grid-cols-3 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="countryCode">Code</Label>
-                <Input id="countryCode" value={form.countryCode} onChange={set("countryCode")} placeholder="+91" required />
-              </div>
-              <div className="col-span-2 space-y-2">
-                <Label htmlFor="phoneNumber">Phone Number</Label>
-                <Input id="phoneNumber" value={form.phoneNumber} onChange={set("phoneNumber")} placeholder="9876543210" required />
-              </div>
-            </div>
+  <div className="space-y-2">
+    <Label htmlFor="countryCode">Country Code</Label>
+    <Input id="countryCode" value={form.countryCode} onChange={set("countryCode")} placeholder="IN" required />
+    <p className="text-xs text-muted-foreground">e.g. IN, US, GB</p>
+  </div>
+  <div className="col-span-2 space-y-2">
+    <Label htmlFor="phoneNumber">Phone Number</Label>
+    <Input id="phoneNumber" value={form.phoneNumber} onChange={set("phoneNumber")} placeholder="9876543210" required />
+  </div>
+</div>
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Creating Account…" : "Create Account"}
             </Button>

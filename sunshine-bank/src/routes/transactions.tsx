@@ -17,6 +17,7 @@ function TransactionsPage() {
   const navigate = useNavigate();
   const [txns, setTxns] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const load = () => {
     setLoading(true);
@@ -32,13 +33,13 @@ function TransactionsPage() {
   }, [navigate]);
 
   const handleSendStatement = async () => {
-    try {
-      await account.sendStatement();
-      alert("Statement sent to your email!");
-    } catch (err: any) {
-      alert(err.message || "Failed to send statement");
-    }
-  };
+  try {
+    await account.sendStatement();
+    setMsg({ type: "success", text: "Statement sent to your email!" });
+  } catch (err: any) {
+    setMsg({ type: "error", text: err.message || "Failed to send statement" });
+  }
+};
 
   return (
     <AppLayout>
@@ -57,6 +58,12 @@ function TransactionsPage() {
             </Button>
           </div>
         </div>
+
+        {msg && (
+  <div className={`mb-4 p-3 rounded-lg text-sm ${msg.type === "success" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"}`}>
+    {msg.text}
+  </div>
+)}
 
         <div className="rounded-xl border border-border bg-card overflow-hidden">
           {loading ? (

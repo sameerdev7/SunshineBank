@@ -23,7 +23,13 @@ function PinManagementPage() {
   useEffect(() => {
     if (!isAuthenticated()) { navigate({ to: "/login" }); return; }
     account.checkPin()
-      .then((res) => setHasPin(res?.hasPin ?? res?.hasPIN ?? true))
+      .then((res: any) => {
+  if (typeof res === 'string') {
+    setHasPin(res.includes("has been created"));
+  } else {
+    setHasPin(res?.hasPin ?? res?.hasPIN ?? false);
+  }
+})
       .catch(() => setHasPin(false));
   }, [navigate]);
 
@@ -43,14 +49,7 @@ function PinManagementPage() {
           ) : !hasPin ? (
             <CreatePinForm onCreated={() => setHasPin(true)} />
           ) : (
-            <Tabs defaultValue="update">
-              <TabsList className="w-full mb-6">
-                <TabsTrigger value="update" className="flex-1">Update PIN</TabsTrigger>
-              </TabsList>
-              <TabsContent value="update">
-                <UpdatePinForm />
-              </TabsContent>
-            </Tabs>
+            <UpdatePinForm/>
           )}
         </div>
       </motion.div>
